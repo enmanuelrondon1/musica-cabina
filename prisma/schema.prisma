@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Ambience {
+  CALM
+  NATURE
+  ENERGIZING
+  MEDITATIVE
+}
+
+model Treatment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  durationMin Int
+  ambience    Ambience @default(CALM)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tracks TreatmentTrack[]
+}
+
+model Track {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  artist      String?
+  url         String
+  publicId    String
+  durationSec Int
+  license     String
+  createdAt   DateTime @default(now())
+
+  treatments TreatmentTrack[]
+}
+
+model TreatmentTrack {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  position    Int    @default(0)
+
+  treatmentId String    @db.ObjectId
+  trackId     String    @db.ObjectId
+  treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  track       Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([treatmentId, trackId])
+  @@index([treatmentId, position])
+}

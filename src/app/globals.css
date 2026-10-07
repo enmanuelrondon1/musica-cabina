@@ -1,26 +1,86 @@
+/* src/app/globals.css */
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f6f1ea;
+  --foreground: #3b2f2a;
+  --card: #fffbf5;
+  --muted: #8a7b70;
+  --border: #e6dccf;
+  --sage: #8fa68e;
+  --sage-dark: #6f8a6e;
+  --terracotta: #c97b5a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-sage: var(--sage);
+  --color-sage-dark: var(--sage-dark);
+  --color-terracotta: var(--terracotta);
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Tailwind v4 ya no pone cursor de mano en los botones */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--sage-dark);
+    outline-offset: 2px;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-breathe {
+  animation: breathe 8s ease-in-out infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+
+/* Respeta a quien desactiva las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
